@@ -244,3 +244,18 @@ def residuals(params, x_data, y_data, fitting_function):
     # lssol = least_squares(residuals, x0=(50, 1), args=(xdata, ydata, fit_model))
     # print(lssol.x )
     return diff * weights
+
+def pressure_to_saturation(Pc,alpha, n, m=None):
+    '''# alpha should be in SI units 1/m
+    # Pc, alpha, n and m can be arrays'''
+    rhog = 9800
+    if m is None:
+        m = 1 - 1/n
+    alpha_h = np.multiply(Pc/rhog, alpha)
+    if np.min(alpha_h) < 1:
+        print('Warning: the capillary pressure is smaller than entry pressure of {:.3f} Pa\n'.format(rhog/np.min(alpha)))
+
+    #print(alpha_h)
+    Stemp = np.power(alpha_h, n)
+    Se = np.power(Stemp, -1*m)
+    return Se
